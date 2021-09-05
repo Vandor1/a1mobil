@@ -14,6 +14,9 @@
         android:theme="@style/Theme.A1Mobile"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.login.RegisterActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.login.Register"
             android:exported="true"
             android:label="@string/title_activity_register"
