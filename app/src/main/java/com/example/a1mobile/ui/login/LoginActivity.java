@@ -29,6 +29,8 @@ import com.example.a1mobile.ui.login.LoginViewModel;
 import com.example.a1mobile.ui.login.LoginViewModelFactory;
 import com.example.a1mobile.databinding.ActivityLoginBinding;
 
+import org.w3c.dom.Text;
+
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
@@ -51,6 +53,16 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
+
+        /*final TextView registerOnclickText = binding.CreateNewUser;*/
+        TextView registerOnclickText = findViewById(R.id.CreateNewUser);
+
+        registerOnclickText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRegister();
+            }
+        });
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -133,11 +145,15 @@ public class LoginActivity extends AppCompatActivity {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, Logged IN.class);
+
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    private void openRegister(){
+        startActivity(new Intent(this, RegisterActivity.class));
     }
 }
