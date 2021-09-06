@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -24,12 +25,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.a1mobile.R;
 import com.example.a1mobile.ui.login.LoginViewModel;
 import com.example.a1mobile.ui.login.LoginViewModelFactory;
 import com.example.a1mobile.databinding.ActivityLoginBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -42,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Allow HTTP calls.
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+
+        // volley for HTTP requests.
+        RequestQueue queue = Volley.newRequestQueue(this);
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -137,23 +158,49 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
+                //Send request
+                loginRequest(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
         });
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        //Intent intent = new Intent(this, Logged IN.class);
-
+        startActivity(new Intent(this, ListOfItemsPageActivity.class));
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    private void openRegister(){
+    private void openRegister() {
         startActivity(new Intent(this, RegisterActivity.class));
+    }
+
+    public void loginRequest(String username, String password){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String url = "http://192.168.10.158:8081/api/"  + "auth/login?uid=" + username + "&pwd=" + password;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("VOLLEY", response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response){
+                String responseString = "";
+                if(response != null){
+                    responseString = String.valueOf(response.statusCode);
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+            }
+        };
+            requestQueue.add(stringRequest);
     }
 }
