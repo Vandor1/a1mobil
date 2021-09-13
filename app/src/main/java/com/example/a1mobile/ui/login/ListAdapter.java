@@ -1,5 +1,6 @@
 package com.example.a1mobile.ui.login;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,7 +14,7 @@ import com.example.a1mobile.R;
  * https://developer.android.com/guide/topics/ui/layout/recyclerview#java
  */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
-    OnClickListener listener = position -> {};
+ /*   OnClickListener listener = position -> {};
 
     public void setOnClickListener(OnClickListener listener) {
         this.listener = listener;
@@ -21,6 +22,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
 
     interface OnClickListener {
         void onClick(int position);
+    }*/
+    String title, desc;
+    int img;
+    Context context;
+
+    public ListAdapter(Context context, String title, String desc, int img){
+        this.context = context;
+        this.title = title;
+        this.desc = desc;
+        this.img = img;
     }
 
     @NonNull
@@ -46,7 +57,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
+/*
             view.setOnClickListener(v -> listener.onClick(getAdapterPosition()));
+*/
             textView = (TextView) view.findViewById(R.id.listItemTitle);
         }
 

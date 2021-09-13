@@ -101,24 +101,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                finish();
+        loginViewModel.getLoginResult().observe(this, loginResult -> {
+            if (loginResult == null) {
+                return;
             }
+            loadingProgressBar.setVisibility(View.GONE);
+            if (loginResult.getError() != null) {
+                showLoginFailed(loginResult.getError());
+            }
+            if (loginResult.getSuccess() != null) {
+/*                updateUiWithUser(loginResult.getSuccess());*/
+            }
+            setResult(Activity.RESULT_OK);
+
+            //Complete and destroy login activity once successful
+            finish();
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -140,33 +137,28 @@ public class LoginActivity extends AppCompatActivity {
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-                //Send request
-                loginRequest(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
+            return false;
+        });
+
+        loginButton.setOnClickListener(v -> {
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            loginViewModel.login(usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString());
+            //Send request
+            String username = usernameEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+            System.out.println(username + " " + password);
+            loginRequest(username, password, queue);
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+    private void updateUiWithUser() {
+        Toast.makeText(getApplicationContext(), "welcome", Toast.LENGTH_LONG).show();
         startActivity(new Intent(this, ListOfItemsPageActivity.class));
     }
 
@@ -178,29 +170,30 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(new Intent(this, RegisterActivity.class));
     }
 
-    public void loginRequest(String username, String password){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "http://192.168.10.158:8081/api/"  + "auth/login?uid=" + username + "&pwd=" + password;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i("VOLLEY", response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+    public void loginRequest(String username, String password, RequestQueue requestQueue){
+        String url = "http://192.168.10.158:8080/api/"  + "auth/login?uid=" + username + "&pwd=" + password;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
+            Log.i("VOLLEY", response);
+            System.out.println("onRespoonse provided: " + response);
+            User user = User.getInstance();
+            user.setUserid(username);
+            user.setPassword(password);
+            user.setToken(response.toString());
+            System.out.println(response.toString());
+            finish();
+        }, error -> System.out.println("ERROR IN ERROR-RESPONSE LOGINREQUEST METHOD: " + error)) {
 
-            }
-        }) {
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response){
                 String responseString = "";
                 if(response != null){
                     responseString = String.valueOf(response.statusCode);
                 }
+                assert response != null;
                 return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
             }
         };
+        System.out.println("Request queue adds request:");
             requestQueue.add(stringRequest);
     }
 }
