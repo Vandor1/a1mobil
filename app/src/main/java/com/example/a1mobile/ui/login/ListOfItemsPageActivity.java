@@ -13,8 +13,12 @@ import com.example.a1mobile.R;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ListOfItemsPageActivity extends AppCompatActivity implements UserObserver {
     TextView username;
+    List<Product> productList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +28,41 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String title = findViewById(R.id.listItemTitle).toString();
+        productList = new ArrayList<>();
+
+        productList.add(
+                new Product(
+                  "A bike!",
+                  "This is a bike for sale! It is cool?",
+                  "https://unsplash.com/photos/oDKyhEjOBfc",
+                        30
+                )
+        );
+        productList.add(
+                new Product(
+                        "A bike!",
+                        "This is a bike for sale! It is cool?",
+                        "https://unsplash.com/photos/oDKyhEjOBfc",
+                        30
+                )
+        );
+        productList.add(
+                new Product(
+                        "A bike!",
+                        "This is a bike for sale! It is cool?",
+                        "https://unsplash.com/photos/oDKyhEjOBfc",
+                        30
+                )
+        );
+
+
+        /*String title = findViewById(R.id.listItemTitle).toString();
         String desc = findViewById(R.id.listItemDesc).toString();
         int img = Integer.parseInt(findViewById(R.id.listItemImage).toString());
-
-        ListAdapter adapter = new ListAdapter(this, title, desc, img);
+*/
+        ListAdapter adapter = new ListAdapter(this, productList);
+        recyclerView.setAdapter(adapter);
         username = findViewById(R.id.username);
-
         username.setOnClickListener( click -> {
             startActivity(new Intent(this, LoginActivity.class));
         });
