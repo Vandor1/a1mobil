@@ -23,13 +23,14 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
     private String murl = "http://10.0.2.2:8080/api/";
     private String imgURL = murl + "fant/photo/";
-
+    private OnListItemListener onListItemListener;
     private List<Product> listItems;
     Context context;
 
-    public ListAdapter(Context context, List<Product> listItems){
+    public ListAdapter(Context context, List<Product> listItems, OnListItemListener onListItemListener){
         this.context = context;
         this.listItems = listItems;
+        this.onListItemListener = onListItemListener;
     }
 
     @NonNull
@@ -37,7 +38,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
     public ListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.list_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, onListItemListener);
     }
 
     @Override
@@ -54,18 +55,30 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
         return listItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView title, desc;
         ImageView img;
+        OnListItemListener onListItemListener;
 
-        public ViewHolder(@NonNull View view) {
+        public ViewHolder(@NonNull View view, OnListItemListener onListItemListener) {
             super(view);
             title = view.findViewById(R.id.listItemTitle);
             desc = view.findViewById(R.id.listItemDesc);
             img = view.findViewById(R.id.listItemImage);
+            this.onListItemListener = onListItemListener;
+
+            view.setOnClickListener(this);
             }
+
+        @Override
+        public void onClick(View view) {
+            onListItemListener.onItemClick(getAdapterPosition());
+        }
+
     }
+
+    public interface OnListItemListener{void onItemClick(int position);}
 
     private void setImagePicasso(ImageView imageView){
         Picasso.get()

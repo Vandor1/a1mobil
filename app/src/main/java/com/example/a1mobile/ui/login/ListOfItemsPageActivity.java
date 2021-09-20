@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.example.a1mobile.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 import org.w3c.dom.Text;
@@ -22,7 +23,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListOfItemsPageActivity extends AppCompatActivity implements UserObserver {
+public class ListOfItemsPageActivity extends AppCompatActivity implements UserObserver, ListAdapter.OnListItemListener {
     public static final String BASEURL = "http://10.0.2.2:8080/api/";
     TextView username;
     TextView logout;
@@ -72,7 +73,7 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
                         30
                 )
         );
-        ListAdapter adapter = new ListAdapter(this, productList);
+        ListAdapter adapter = new ListAdapter(this, productList, this);
         recyclerView.setAdapter(adapter);
 
         logout = findViewById(R.id.logout);
@@ -86,6 +87,11 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
         username = findViewById(R.id.username);
         username.setOnClickListener( click -> {
             startActivity(new Intent(this, LoginActivity.class));
+        });
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.newItemButton);
+        floatingActionButton.setOnClickListener( click ->{
+            startActivity(new Intent(this, NewItemActivity.class));
         });
     }
 
@@ -113,5 +119,14 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
     private void logout(){
         username.setText("Sign in");
         logout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Log.i("Clicked item on list.", "onItemClick, position: " + position);
+        Intent intent = new Intent(this, ItemDetailsActivity.class);
+
+        intent.putExtra("selected_product", productList.get(position));
+        startActivity(intent);
     }
 }
