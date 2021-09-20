@@ -67,4 +67,14 @@ public class User {
             observer.update();
         }
     }
+
+    /**
+     * TODO: FIX
+     */
+    public void clearAll(){
+        User user = User.getInstance();
+        user.setToken(null);
+        user.setPassword(null);
+        user.setUserid("Sign in");
+    }
 }

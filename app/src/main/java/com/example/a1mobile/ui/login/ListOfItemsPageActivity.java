@@ -29,45 +29,48 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         productList = new ArrayList<>();
-
+        //Dummy data
         productList.add(
                 new Product(
-                  "A bike!",
-                  "This is a bike for sale! It is cool?",
-                  "https://unsplash.com/photos/oDKyhEjOBfc",
+                  "Pablo's dog",
+                  "A dog painted or drawn by picasso.",
+                  "https://i.imgur.com/nBK4b1F.jpeg",
                         30
                 )
         );
         productList.add(
                 new Product(
-                        "A bike!",
-                        "This is a bike for sale! It is cool?",
-                        "https://unsplash.com/photos/oDKyhEjOBfc",
+                        "A picasso art piece",
+                        "This is made by Picasso",
+                        "https://i.imgur.com/DvpvklR.jpg",
                         30
                 )
         );
         productList.add(
                 new Product(
-                        "A bike!",
-                        "This is a bike for sale! It is cool?",
-                        "https://unsplash.com/photos/oDKyhEjOBfc",
+                        "A picasso art piece",
+                        "This is made by Picasso",
+                        "https://i.imgur.com/DvpvklR.jpg",
+                        30
+                )
+        );
+        productList.add(
+                new Product(
+                        "Pablo's dog",
+                        "A dog painted or drawn by picasso. This is a longer description to test the description length.",
+                        "https://i.imgur.com/nBK4b1F.jpeg",
                         30
                 )
         );
 
-
-        /*String title = findViewById(R.id.listItemTitle).toString();
-        String desc = findViewById(R.id.listItemDesc).toString();
-        int img = Integer.parseInt(findViewById(R.id.listItemImage).toString());
-*/
         ListAdapter adapter = new ListAdapter(this, productList);
         recyclerView.setAdapter(adapter);
+
+        //todo: if logged in set visibility
         username = findViewById(R.id.username);
         username.setOnClickListener( click -> {
             startActivity(new Intent(this, LoginActivity.class));
         });
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
     }
 
     @Override

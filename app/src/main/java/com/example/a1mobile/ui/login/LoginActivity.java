@@ -75,29 +75,20 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
 
-        /*final TextView registerOnclickText = binding.CreateNewUser;*/
         TextView registerOnclickText = findViewById(R.id.CreateNewUser);
 
-        registerOnclickText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openRegister();
-            }
-        });
+        registerOnclickText.setOnClickListener(v -> openRegister());
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
+        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
+            if (loginFormState == null) {
+                return;
+            }
+            loginButton.setEnabled(loginFormState.isDataValid());
+            if (loginFormState.getUsernameError() != null) {
+                usernameEditText.setError(getString(loginFormState.getUsernameError()));
+            }
+            if (loginFormState.getPasswordError() != null) {
+                passwordEditText.setError(getString(loginFormState.getPasswordError()));
             }
         });
 
@@ -110,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 showLoginFailed(loginResult.getError());
             }
             if (loginResult.getSuccess() != null) {
-/*                updateUiWithUser(loginResult.getSuccess());*/
+            /* updateUiWithUser(loginResult.getSuccess());*/
             }
             setResult(Activity.RESULT_OK);
 
@@ -157,11 +148,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUiWithUser() {
-        Toast.makeText(getApplicationContext(), "welcome", Toast.LENGTH_LONG).show();
-        startActivity(new Intent(this, ListOfItemsPageActivity.class));
-    }
-
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
@@ -171,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginRequest(String username, String password, RequestQueue requestQueue){
-        String url = "http://192.168.10.158:8080/api/"  + "auth/login?uid=" + username + "&pwd=" + password;
+        String url = "http://10.0.2.2:8080/api/"  + "auth/login?uid=" + username + "&pwd=" + password;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
             Log.i("VOLLEY", response);
             System.out.println("onRespoonse provided: " + response);
@@ -181,7 +167,12 @@ public class LoginActivity extends AppCompatActivity {
             user.setToken(response.toString());
             System.out.println(response.toString());
             finish();
-        }, error -> System.out.println("ERROR IN ERROR-RESPONSE LOGINREQUEST METHOD: " + error)) {
+        }, error -> {
+            User user = User.getInstance();
+            user.clearAll();
+            System.out.println("User reset.");
+            System.out.println("ERROR IN ERROR-RESPONSE LOGINREQUEST METHOD: " + error);
+        }) {
 
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response){

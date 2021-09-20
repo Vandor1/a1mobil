@@ -1,6 +1,7 @@
 package com.example.a1mobile.ui.login;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,8 @@ import java.util.List;
  * https://developer.android.com/guide/topics/ui/layout/recyclerview#java
  */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
-    private String murl = "http://192.168.10.158:8080/api/";
-    private String imgURL = murl+"fant/photo/";
+    private String murl = "http://10.0.2.2:8080/api/";
+    private String imgURL = murl + "fant/photo/";
 
     private List<Product> listItems;
     Context context;
@@ -40,14 +41,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
         Product product = listItems.get(position);
-        viewHolder.desc.setText(product.getDescription());
-        viewHolder.title.setText(product.getTitle());
-        setImageBitmap(viewHolder.img);
-/*
-        viewHolder.desc.setText(product.getPrice());
-*/
+        holder.desc.setText(product.getDescription());
+        holder.title.setText(product.getTitle());
+        Picasso.get().load(Uri.parse(product.getImageURL())).into(holder.img);
+        /*setImageBitmap(holder.img)*/;
     }
 
     @Override
@@ -68,10 +67,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
             }
     }
 
-    private void setImageBitmap(ImageView imageView){
+    private void setImagePicasso(ImageView imageView){
         Picasso.get()
                 .load(imgURL)
-                .placeholder(R.drawable.abc_vector_test)
+                .placeholder(R.drawable.ic_launcher_background)
                 .centerCrop()
                 .fit()
                 .noFade()
