@@ -1,12 +1,8 @@
 package com.example.a1mobile.ui.login;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
 public class User {
     private List<UserObserver> observers = new ArrayList<UserObserver>();
@@ -68,13 +64,10 @@ public class User {
         }
     }
 
-    /**
-     * TODO: FIX
-     */
     public void clearAll(){
         User user = User.getInstance();
         user.setToken(null);
         user.setPassword(null);
-        user.setUserid("Sign in");
+        user.setUserid(null);
     }
 }
