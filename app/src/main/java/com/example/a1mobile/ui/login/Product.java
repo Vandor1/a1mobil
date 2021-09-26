@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 /**
  * Parcelable: https://www.youtube.com/watch?v=OUZcjZkJrvY
- * Packaged in a way Android understands.
+ * "Packaged in a way Android understands."
  */
 public class Product implements Parcelable {
     private String title;

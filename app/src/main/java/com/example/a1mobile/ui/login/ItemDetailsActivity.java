@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.a1mobile.R;
 import com.squareup.picasso.Picasso;
@@ -19,14 +21,14 @@ public class ItemDetailsActivity extends AppCompatActivity {
     TextView title;
     TextView description;
     TextView price;
-    ImageView imageView;
+    ViewPager2 viewPager2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_item_details);
 
-        imageView = findViewById(R.id.imageViewDetails);
+        viewPager2 = findViewById(R.id.viewPagerDetails);
         title = findViewById(R.id.itemDetailsTitle);
         price = findViewById(R.id.itemDetailsPrice);
         description = findViewById(R.id.itemDetailsDesc);
@@ -37,7 +39,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
             title.setText(product.getTitle());
             description.setText(product.getDescription());
             price.setText(String.valueOf(product.getPrice()));
-            Picasso.get().load(Uri.parse(product.getImageURL())).into(imageView);
+
+            Picasso.get().load(Uri.parse(product.getImageURL())).into(viewPager2);
+
+
         } else {
             title.setText(WRONG);
             description.setText(WRONG);
@@ -45,3 +50,5 @@ public class ItemDetailsActivity extends AppCompatActivity {
         }
     }
 }
+
+

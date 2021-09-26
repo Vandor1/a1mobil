@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageViewDetails"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerDetails"
         android:layout_width="202dp"
         android:layout_height="229dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/viewPagerDetails" />
 
     <TextView
         android:id="@+id/itemDetailsTitle"
