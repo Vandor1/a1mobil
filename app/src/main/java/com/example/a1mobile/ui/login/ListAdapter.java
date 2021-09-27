@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a1mobile.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,8 +47,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
         Product product = listItems.get(position);
         holder.desc.setText(product.getDescription());
         holder.title.setText(product.getTitle());
-        Picasso.get().load(Uri.parse(product.getImageURL())).into(holder.img);
-        /*setImageBitmap(holder.img)*/;
+        String imageURL = product.getImageURLs().get(0);
+        Picasso.get().load(Uri.parse(imageURL)).into(holder.img);
     }
 
     @Override
@@ -88,5 +89,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
                 .fit()
                 .noFade()
                 .into(imageView);
+    }
+
+    public void setFilteredList(List<Product> filteredList){
+        this.listItems = filteredList;
+        notifyDataSetChanged();
     }
 }

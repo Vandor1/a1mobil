@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    android:layout_width="409dp"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="?attr/actionBarTheme">
+
+    <TextView
+        android:id="@+id/fantLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fant_application"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_gravity="start"/>
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:textColor="@color/white"
+        android:layout_gravity="end"
+        android:layout_marginEnd="10dp"
+        />
+
+    <TextView
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logout"
+        android:textColor="@color/white"
+        android:layout_gravity="end"
+        android:layout_marginEnd="30dp"/>
+
+</androidx.appcompat.widget.Toolbar>

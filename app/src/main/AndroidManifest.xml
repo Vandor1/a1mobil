@@ -11,19 +11,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.A1Mobile"
+        android:theme="@style/Theme.A1Mobile.NoActionBar"
         android:usesCleartextTraffic="true">
-
+        <!--NoActionBar means I remove the default theme, and replace it with my own.-->
         <activity
             android:name=".ui.login.ListOfItemsPageActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.login.RegisterActivity"
             android:exported="true"

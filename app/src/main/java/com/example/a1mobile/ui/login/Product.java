@@ -3,6 +3,9 @@ package com.example.a1mobile.ui.login;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Parcelable: https://www.youtube.com/watch?v=OUZcjZkJrvY
  * "Packaged in a way Android understands."
@@ -10,23 +13,26 @@ import android.os.Parcelable;
 public class Product implements Parcelable {
     private String title;
     private String description;
-    private String imageURL;
+    private List<String> imageURLs;
     private int price;
 
-    public Product(String title, String description, String imageURL, int price) {
+    public Product(String title, String description,List<String> imageURLs, int price) {
         this.title = title;
         this.description = description;
-        this.imageURL = imageURL;
+        this.imageURLs = imageURLs;
         this.price = price;
     }
 
     protected Product(Parcel in) {
         title = in.readString();
         description = in.readString();
-        imageURL = in.readString();
+        imageURLs = in.createStringArrayList();
         price = in.readInt();
     }
 
+    /**
+     *  -- from createStringArrayList().
+     */
     public static final Creator<Product> CREATOR = new Creator<Product>() {
         @Override
         public Product createFromParcel(Parcel in) {
@@ -55,12 +61,8 @@ public class Product implements Parcelable {
         this.description = description;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public List<String> getImageURLs() {
+        return imageURLs;
     }
 
     public int getPrice() {
@@ -80,7 +82,7 @@ public class Product implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(title);
         parcel.writeString(description);
-        parcel.writeString(imageURL);
+        parcel.writeStringList(imageURLs);
         parcel.writeInt(price);
     }
 
@@ -89,7 +91,7 @@ public class Product implements Parcelable {
         return "Product{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", imageURL='" + imageURL + '\'' +
+                ", imageURLs='" + imageURLs + '\'' +
                 ", price=" + price +
                 '}';
     }

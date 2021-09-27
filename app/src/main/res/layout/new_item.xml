@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/global_toolbar"
+        />
+
     <TextView
         android:id="@+id/newItemTitle"
         android:layout_width="wrap_content"
@@ -14,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        app:layout_constraintVertical_bias="0.103" />
 
     <EditText
         android:id="@+id/newItemTitleInput"
@@ -47,7 +52,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/priceInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -71,7 +76,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
+        app:layout_constraintTop_toBottomOf="@+id/priceInput"
         app:layout_constraintVertical_bias="0.041" />
 
     <EditText

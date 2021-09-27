@@ -52,7 +52,6 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
-    private ActivityLoginBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         // volley for HTTP requests.
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())

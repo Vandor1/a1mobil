@@ -1,24 +1,19 @@
 package com.example.a1mobile.ui.login;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
-import androidx.appcompat.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
 import com.example.a1mobile.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import org.json.JSONException;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +23,10 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
     TextView username;
     TextView logout;
     List<Product> productList;
+    List<String> imageUrls;
     RequestQueue requestQueue;
+    SearchView search;
+    ListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,42 +38,44 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         productList = new ArrayList<>();
-        //Dummy data
-        productList.add(
-                new Product(
-                  "Pablo's dog",
-                  "A dog painted or drawn by picasso.",
-                  "https://i.imgur.com/nBK4b1F.jpeg",
-                        30
-                )
-        );
-        productList.add(
-                new Product(
-                        "A picasso art piece",
-                        "This is made by Picasso",
-                        "https://i.imgur.com/DvpvklR.jpg",
-                        30
-                )
-        );
-        productList.add(
-                new Product(
-                        "A picasso art piece",
-                        "This is made by Picasso",
-                        "https://i.imgur.com/DvpvklR.jpg",
-                        30
-                )
-        );
-        productList.add(
-                new Product(
-                        "Pablo's dog",
-                        "A dog painted or drawn by picasso. This is a longer description to test the description length.",
-                        "https://i.imgur.com/nBK4b1F.jpeg",
-                        30
-                )
-        );
-        ListAdapter adapter = new ListAdapter(this, productList, this);
+        imageUrls = new ArrayList<>();
+
+        addDummyData();
+
+        adapter = new ListAdapter(this, productList, this);
         recyclerView.setAdapter(adapter);
 
+        setupToolbar();
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.newItemButton);
+        floatingActionButton.setOnClickListener( click ->{
+            startActivity(new Intent(this, NewItemActivity.class));
+        });
+
+        search = findViewById(R.id.search_bar);
+        search.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    /**
+                     * TODO: Dummy data is filtered once and there is no way to return to the original list as of now.
+                     */
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        ArrayList<Product> foundItems = new ArrayList<>();
+                        productList.stream().filter(searchQuery -> searchQuery.getTitle().contains(s))
+                                .forEach(foundItems::add);
+                        adapter.setFilteredList(foundItems);;
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        return false;
+                    }
+                }
+        );
+    }
+
+    private void setupToolbar() {
         logout = findViewById(R.id.logout);
         logout.setVisibility(View.GONE);
         logout.setOnClickListener(click -> {
@@ -83,16 +83,18 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
             user.clearAll();
             logout();
         });
-
         username = findViewById(R.id.username);
-        username.setOnClickListener( click -> {
-            startActivity(new Intent(this, LoginActivity.class));
-        });
+        username.setOnClickListener( click -> { startActivity(new Intent(this, LoginActivity.class)); });
+    }
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.newItemButton);
-        floatingActionButton.setOnClickListener( click ->{
-            startActivity(new Intent(this, NewItemActivity.class));
-        });
+
+    private void addDummyData() {
+        imageUrls.add("https://i.imgur.com/nBK4b1F.jpeg");
+        imageUrls.add("https://i.imgur.com/nBK4b1F.jpeg");
+        productList.add(new Product("Pablo's dog", "A dog painted or drawn by picasso.", imageUrls, 30));
+        productList.add(new Product("A picasso art piece", "This is made by Picasso", imageUrls, 30));
+        productList.add(new Product("A picasso art piece", "This is made by Picasso", imageUrls, 30));
+        productList.add(new Product("Pablo's dog", "A dog painted or drawn by picasso. This is a longer description to test the description length.", imageUrls, 30));
     }
 
     @Override
@@ -117,7 +119,7 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
     }*/
 
     private void logout(){
-        username.setText("Sign in");
+        username.setText(R.string.action_sign_in_short);
         logout.setVisibility(View.GONE);
     }
 

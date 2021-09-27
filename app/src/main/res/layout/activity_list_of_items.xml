@@ -6,77 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".ui.login.ListOfItemsPageActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <include
         android:id="@+id/toolbar"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toBottomOf="parent"
+        layout="@layout/global_toolbar"
+        />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="203dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="104dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.002" />
-
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/username"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.953"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.487" />
-
-    <TextView
-        android:id="@+id/logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.732"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.487" />
-
-    <TextView
-        android:id="@+id/fantLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/fant_application"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.071"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.026" />
-
-    <TextView
-        android:id="@+id/listTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/items_for_sale"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.098" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="45dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
