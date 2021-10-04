@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -14,6 +15,15 @@
         android:theme="@style/Theme.A1Mobile.NoActionBar"
         android:usesCleartextTraffic="true">
         <!--NoActionBar means I remove the default theme, and replace it with my own.-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="no.com.example.a1mobile.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
         <activity
             android:name=".ui.login.ListOfItemsPageActivity"
             android:exported="true">

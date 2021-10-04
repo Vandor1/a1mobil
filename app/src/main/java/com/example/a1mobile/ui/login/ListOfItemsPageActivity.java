@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,7 +50,13 @@ public class ListOfItemsPageActivity extends AppCompatActivity implements UserOb
 
         FloatingActionButton floatingActionButton = findViewById(R.id.newItemButton);
         floatingActionButton.setOnClickListener( click ->{
-            startActivity(new Intent(this, NewItemActivity.class));
+            if (User.getInstance().getToken() != null){
+                startActivity(new Intent(this, NewItemActivity.class));
+            } else {
+                Toast toast = Toast.makeText(this, "You need to be logged in to add items!", Toast.LENGTH_SHORT);
+                toast.show();
+                System.out.println("Cannot login!");
+            }
         });
 
         search = findViewById(R.id.search_bar);

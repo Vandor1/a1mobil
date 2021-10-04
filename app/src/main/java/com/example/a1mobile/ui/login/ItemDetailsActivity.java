@@ -43,7 +43,6 @@ public class ItemDetailsActivity extends AppCompatActivity implements UserObserv
         title = findViewById(R.id.itemDetailsTitle);
         price = findViewById(R.id.itemDetailsPrice);
         description = findViewById(R.id.itemDetailsDesc);
-
         if(getIntent().hasExtra("selected_product")){
             Product product = getIntent().getParcelableExtra("selected_product");
             Log.d(TAG, "onCreate: " + product.toString());
