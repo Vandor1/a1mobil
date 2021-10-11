@@ -8,6 +8,8 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -32,14 +34,19 @@ public class NewItemActivity extends AppCompatActivity implements UserObserver{
     String imageUrl;
     Button addImageButton;
     Button addItemButton;
+    Button removeImageButton;
 
     TextView username;
     TextView logout;
 
+    List<ImageView> selected = new ArrayList<>();
+    LinearLayout imageViewLayout;
+    Uri photoURI;
+
     File currentPhoto;
     List<File> photoFiles = new ArrayList<>();
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final String FILEPROVIDER = "com.example.a1mobile.fileprovider";
+    static final String FILEPROVIDER = "no.com.example.a1mobile.ui.login.fileprovider";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,8 +57,21 @@ public class NewItemActivity extends AppCompatActivity implements UserObserver{
         Button cancel = findViewById(R.id.cancelNewItem);
         cancel.setOnClickListener(click -> finish());
 
+        imageViewLayout = findViewById(R.id.imageViewLayout);
+
+        removeImageButton = findViewById(R.id.deleteImageButton);
+        removeImageButton.setOnClickListener(click -> {
+            for (ImageView imageview : selected){
+                imageViewLayout.removeView(imageview);
+                //photoFiles.remove(imageview.file);
+            }
+            removeImageButton.setEnabled(false);
+        });
         addImageButton = findViewById(R.id.addImageButton);
         addItemButton = findViewById(R.id.generateNewItem);
+        addItemButton.setOnClickListener(click ->{
+            addItem();
+        });
         title = findViewById(R.id.newItemTitleInput);
         price = findViewById(R.id.priceInput);
         desc = findViewById(R.id.newItemDescInput);
@@ -62,15 +82,23 @@ public class NewItemActivity extends AppCompatActivity implements UserObserver{
         setupToolbar();
     }
 
+    public void addItem(){
+        String itemTitle = title.toString();
+        String itemPrice = price.toString();
+        String itemDesc = desc.toString();
+
+        //post method ->
+
+    }
+
     public void onCameraClicked(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         System.out.println("Clicked add image.");
         if (intent.resolveActivity(getPackageManager()) != null){
             currentPhoto = createImageFile();
-            System.out.println("1");
+            System.out.println("Image created: " + currentPhoto.getName());
             if(currentPhoto != null){
-                System.out.println("2");
-                Uri photoURI = FileProvider.getUriForFile(this, FILEPROVIDER, currentPhoto);
+                photoURI = FileProvider.getUriForFile(this, FILEPROVIDER, currentPhoto);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
             }
@@ -79,7 +107,6 @@ public class NewItemActivity extends AppCompatActivity implements UserObserver{
 
     private File createImageFile(){
         File result = null;
-
         System.out.println("Creating image file..");
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -96,12 +123,29 @@ public class NewItemActivity extends AppCompatActivity implements UserObserver{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
+        if(resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_CAPTURE){
             try {
-                if(requestCode == REQUEST_IMAGE_CAPTURE){
-                    photoFiles.add(currentPhoto);
+                    ImageView imageView = new ImageView(this);
+                    imageView.setImageURI(photoURI);
+                    imageView.setLayoutParams(new LinearLayout.LayoutParams(300,300));
+                    imageView.setOnClickListener(view -> {
+                        if (selected.contains(imageView)) {
+                            selected.remove(imageView);
+                            imageView.setPadding(0,0,0,0);
+                            if (selected.size() == 0){
+                                removeImageButton.setEnabled(false);
+                            }
+                        } else {
+                            selected.add(imageView);
+                            removeImageButton.setEnabled(true);
+                            imageView.setPadding(5,5,5,5);
+                            imageView.setBackgroundColor(0xff0000);
+                        }
+                    });
+                photoFiles.add(currentPhoto);
+                imageViewLayout.addView(imageView);
                     currentPhoto = null;
-                }
+
             } catch ( Exception e ){
                 e.printStackTrace();
             }
